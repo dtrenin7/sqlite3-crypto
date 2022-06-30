@@ -10,8 +10,16 @@ There are two steps involved in adding an AAR file to an Android Studio project:
 ```
     dependencies {
         // Change "sqlite3-release" to the name of the new module!
-        compile project(':sqlite3-release')
+        implementation project(':sqlite3-release')
     }
+```
+
+OR copy prebuilt .AAR file from PREBUILT/ folder to libs folder of your app and add:
+
+```
+dependencies {
+    implementation fileTree(include: ['*.aar'], dir: 'libs')
+}
 ```
 
 Code sample:
