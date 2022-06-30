@@ -13,3 +13,72 @@ There are two steps involved in adding an AAR file to an Android Studio project:
         compile project(':sqlite3-release')
     }
 ```
+
+Code sample:
+```
+import org.sqlite.database.sqlite.SQLiteDatabase;
+import org.sqlite.database.sqlite.SQLiteOpenHelper;
+
+public class BaseDb extends SQLiteOpenHelper {
+
+    static {
+     System.loadLibrary("sqliteX"); // IMPORTANT!
+    }
+
+    private static final String TAG = "BaseDb";
+
+    /**
+     * Schema version. Increment on schema changes.
+     */
+    private static final int DATABASE_VERSION = 15;
+
+    /**
+     * Filename for SQLite file.
+     */
+    private static final String DATABASE_NAME = "base.db";
+    private static BaseDb sInstance = null;
+
+    /**
+     * Private constructor
+     */
+    private BaseDb(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    /**
+     * Get instance of BaseDb
+     *
+     * @return BaseDb instance
+     */
+    public static BaseDb getInstance() {
+        if (sInstance == null) {
+            sInstance = new BaseDb(...);
+            ...
+        }
+        return sInstance;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+      db.execSQL("PRAGMA key = 'secretkey'"); // SET PASSWORD HERE
+      ...
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+      ...
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+      ...
+    }
+
+  }
+
+```
